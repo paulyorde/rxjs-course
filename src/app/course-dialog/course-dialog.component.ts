@@ -1,3 +1,4 @@
+import { Store } from './../common/store.service'
 import {AfterViewInit, Component, ElementRef, Inject, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import {Course} from "../model/course";
@@ -25,7 +26,8 @@ export class CourseDialogComponent implements AfterViewInit {
     constructor(
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<CourseDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) course:Course ) {
+        private store: Store,
+        @Inject(MAT_DIALOG_DATA) course:Course) {
 
         this.course = course;
 
@@ -42,6 +44,14 @@ export class CourseDialogComponent implements AfterViewInit {
 
 
 
+    }
+
+    save() {
+      this.store.saveCourse(this.course.id, this.form.value)
+        .subscribe(
+          () => this.close(),
+          err => console.log('error saving', err)
+        )
     }
 
 
